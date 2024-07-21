@@ -17,10 +17,10 @@ object BackpressureBasics extends App {
     println(s"Sink: $x")
   }
 
-  //  fastSource.to(slowSink).run() // fusing?!
+  // fastSource.to(slowSink).run() // fusing?!
   // not backpressure
 
-  //    fastSource.async.to(slowSink).run()
+  // fastSource.async.to(slowSink).run()
   // backpressure
 
   val simpleFlow = Flow[Int].map { x =>
@@ -31,7 +31,7 @@ object BackpressureBasics extends App {
   fastSource.async
     .via(simpleFlow).async
     .to(slowSink)
-  //    .run()
+  //.run()
 
   /*
     reactions to backpressure (in order):
@@ -45,7 +45,7 @@ object BackpressureBasics extends App {
   fastSource.async
     .via(bufferedFlow).async
     .to(slowSink)
-    .run()
+    //.run()
 
   /*
     1-16: nobody is backpressured
@@ -65,6 +65,7 @@ object BackpressureBasics extends App {
    */
 
   // throttling
+
   import scala.concurrent.duration._
   fastSource.throttle(10, 1.second).runWith(Sink.foreach(println))
 }

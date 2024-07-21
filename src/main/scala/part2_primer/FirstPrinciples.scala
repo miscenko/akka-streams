@@ -18,20 +18,20 @@ object FirstPrinciples extends App {
   val sink = Sink.foreach[Int](println)
 
   val graph = source.to(sink)
-  //  graph.run()
+  //graph.run()
 
   // flows transform elements
   val flow = Flow[Int].map(x => x + 1)
   val sourceWithFlow = source.via(flow)
   val flowWithSink = flow.to(sink)
 
-  //  sourceWithFlow.to(sink).run()
-  //  source.to(flowWithSink).run()
-  //  source.via(flow).to(sink).run()
+//  sourceWithFlow.to(sink).run()
+//  source.to(flowWithSink).run()
+//  source.via(flow).to(sink).run()
 
   // nulls are NOT allowed
-  // val illegalSource = Source.single[String](null)
-  // illegalSource.to(Sink.foreach(println)).run()
+//  val illegalSource = Source.single[String](null)
+//  illegalSource.to(Sink.foreach(println)).run()
   // use Options instead
 
   // various kinds of sources
@@ -39,7 +39,9 @@ object FirstPrinciples extends App {
   val anotherFiniteSource = Source(List(1, 2, 3))
   val emptySource = Source.empty[Int]
   val infiniteSource = Source(Stream.from(1)) // do not confuse an Akka stream with a "collection" Stream
+
   import scala.concurrent.ExecutionContext.Implicits.global
+
   val futureSource = Source.fromFuture(Future(42))
 
   // sinks
@@ -56,7 +58,7 @@ object FirstPrinciples extends App {
 
   // source -> flow -> flow -> ... -> sink
   val doubleFlowGraph = source.via(mapFlow).via(takeFlow).to(sink)
-  //  doubleFlowGraph.run()
+  // doubleFlowGraph.run()
 
   // syntactic sugars
   val mapSource = Source(1 to 10).map(x => x * 2) // Source(1 to 10).via(Flow[Int].map(x => x * 2))
@@ -66,9 +68,9 @@ object FirstPrinciples extends App {
   // OPERATORS = components
 
   /**
-    * Exercise: create a stream that takes the names of persons, then you will keep the first 2 names with length > 5 characters.
-    *
-    */
+   * Exercise: create a stream that takes the names of persons, then you will keep the first 2 names with length > 5 characters.
+   *
+   */
   val names = List("Alice", "Bob", "Charlie", "David", "Martin", "AkkaStreams")
   val nameSource = Source(names)
   val longNameFlow = Flow[String].filter(name => name.length > 5)
